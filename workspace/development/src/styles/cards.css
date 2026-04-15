@@ -1,0 +1,406 @@
+/* --- Spinner --- */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Home Page --- */
+.home-page {
+  flex: 1;
+  padding: var(--spacing-lg);
+}
+
+/* Trip Cards */
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.trip-card {
+  position: relative;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.trip-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.trip-card-trash {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #94A3B8;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.trip-card-trash:hover {
+  background: rgba(0,0,0,0.05);
+  color: #EF4444;
+}
+
+.trip-card-country {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.trip-card-flag {
+  font-size: var(--font-size-base);
+}
+
+.trip-card-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.trip-card-dates {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.trip-card-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Trip Card — Title Row (flex row for title + badge) */
+.trip-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.trip-card-title-row .trip-card-title {
+  margin-bottom: 0;
+}
+
+/* Trip Card — Past */
+.trip-card--past {
+  background: #F5F5F5;
+  border-color: #E8E8E8;
+}
+
+.trip-card--past .trip-card-title {
+  color: #757575;
+}
+
+.trip-card--past .trip-card-country,
+.trip-card--past .trip-card-dates,
+.trip-card--past .trip-card-meta {
+  color: #BDBDBD;
+}
+
+.trip-card--past:hover {
+  box-shadow: none;
+}
+
+/* "기록 완료" badge */
+
+/* Pull-to-Refresh */
+.ptr-indicator {
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 0;
+  transition: height 0.2s ease;
+}
+
+.ptr-indicator.ptr-active {
+  transition: none;
+}
+
+.ptr-indicator.ptr-refreshing {
+  transition: height 0.2s ease;
+}
+
+.ptr-spinner-wrap {
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ptr-arrow {
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: inline-block;
+}
+
+.ptr-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: ptr-spin 0.6s linear infinite;
+}
+
+@keyframes ptr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  text-align: center;
+  min-height: 400px;
+}
+
+.empty-state-icon {
+  width: 120px;
+  height: 120px;
+  min-width: 120px;
+  min-height: 120px;
+  flex-shrink: 0;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-secondary);
+}
+
+.empty-state-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.empty-state-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-button-primary);
+  color: var(--color-text-white);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border: none;
+  min-height: 48px;
+}
+
+/* --- Trip Create / Edit Form --- */
+
+.fab {
+  position: fixed;
+  bottom: calc(var(--tabbar-height) + var(--spacing-lg));
+  right: var(--spacing-lg);
+  width: 56px;
+  height: 56px;
+  background: var(--color-button-primary);
+  color: var(--color-text-white);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: var(--shadow-fab);
+  border: none;
+  z-index: 50;
+  cursor: pointer;
+}
+
+/* --- Share View --- */
+.share-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+}
+
+.share-header {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+}
+
+.share-owner-banner {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+}
+
+.share-owner-link {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.share-trip-card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.share-day-list {
+  margin-bottom: var(--spacing-lg);
+}
+
+.share-day-section-title {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.share-day-card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  cursor: default;
+}
+
+.share-day-label {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.share-day-places {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Comments */
+.comments-section {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.comments-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.comment-item {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.comment-author {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.comment-content {
+  font-size: var(--font-size-base);
+}
+
+.comment-form {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.comment-input {
+  flex: 1;
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-base);
+}
+
+.comment-submit {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-button-primary);
+  color: var(--color-text-white);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border: none;
+  white-space: nowrap;
+}
+
+.comment-login-prompt {
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+
+/* --- Skeleton Loading --- */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-skeleton) 25%, var(--color-skeleton-shine) 50%, var(--color-skeleton) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  height: 120px;
+  margin-bottom: var(--spacing-md);
+}
+
+.skeleton-line {
+  height: 14px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.skeleton-line.short {
+  width: 60%;
+}

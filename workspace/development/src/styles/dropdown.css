@@ -1,0 +1,71 @@
+.cur-dd { position: relative; width: 90px; flex-shrink: 0; }
+.cur-dd-trigger {
+  width: 100%;
+  padding: 10px 12px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1E293B;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+}
+.cur-dd-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.cur-dd-menu {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  z-index: 9999;
+  overflow: hidden;
+  padding: 4px 0;
+}
+.cur-dd-opt {
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1E293B;
+  display: block;
+}
+.cur-dd-opt:hover { background: #F8FAFC; }
+.cur-dd-opt.selected { background: #EFF6FF; color: #2563EB; font-weight: 600; }
+
+/* Nominatim search dropdown */
+.nominatim-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 9999; max-height: 200px; overflow-y: auto; }
+.search-input-wrap { position: relative; z-index: 500; }
+.search-input-wrap .form-input.locked {
+  padding-right: 36px;
+  background: #F1F5F9;
+  color: #1E293B;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+.search-clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #E2E8F0;
+  color: #64748B;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 2;
+}
+.search-clear-btn:hover { background: #CBD5E1; color: #1E293B; }
+.nominatim-item { padding: 10px 12px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #F1F5F9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nominatim-item:hover { background: #F8FAFC; }
+.nominatim-item:last-child { border-bottom: none; }

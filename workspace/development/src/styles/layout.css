@@ -1,0 +1,236 @@
+/* --- Utility --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* --- App Shell --- */
+#root {
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: var(--topbar-height);
+  padding-bottom: var(--tabbar-height);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* --- Sidebar (Desktop) --- */
+.sidebar {
+  display: none;
+  width: var(--sidebar-width);
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-border);
+  padding: var(--spacing-lg);
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md) 0;
+}
+
+.sidebar-nav {
+  list-style: none;
+}
+
+.sidebar-nav-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-base);
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--color-bg-secondary);
+}
+
+.sidebar-nav-item.active {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.sidebar-nav-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sidebar-bottom {
+  position: absolute;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  right: var(--spacing-lg);
+}
+
+.sidebar-logout {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  border-radius: var(--radius-md);
+}
+.sidebar-logout:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+/* --- Responsive: Desktop (>= 768px) --- */
+@media (min-width: 768px) {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabbar {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: var(--sidebar-width);
+    padding-bottom: 0;
+  }
+
+  .home-page .trip-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .trip-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    height: calc(100vh - var(--topbar-height) - 280px);
+    min-height: 400px;
+  }
+
+  .trip-detail-layout > div:first-child {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .trip-detail-layout .place-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .trip-detail-layout .place-list-wrapper .place-section-title {
+    flex-shrink: 0;
+  }
+
+  .trip-detail-layout .place-list-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* 빈 상태: 아이콘+문구를 영역 가운데 고정 */
+  .trip-detail-layout .place-list-scroll .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .trip-detail-layout .day-memo {
+    flex-shrink: 0;
+  }
+
+  .trip-detail-layout .map-container {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .map-toggle {
+    display: none;
+  }
+
+  .map-desktop-only {
+    display: block;
+  }
+
+  .fab {
+    bottom: var(--spacing-lg);
+  }
+
+  .share-page {
+    max-width: 800px;
+  }
+}
+
+/* --- Desktop: 1440px --- */
+@media (min-width: 1200px) {
+  .home-page .trip-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- Toast Notification --- */
+.toast {
+  position: fixed;
+  bottom: calc(var(--tabbar-height) + var(--spacing-md));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text-primary);
+  color: var(--color-text-white);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.toast.visible {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .toast {
+    bottom: var(--spacing-lg);
+  }
+}

@@ -1,0 +1,17 @@
+/* Schedule Create Page */
+.schedule-places { padding: 0 0 16px; }
+.place-order-btn {
+  width: 28px;
+  height: 24px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #64748B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.place-order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.place-order-btn:hover:not(:disabled) { background: #F1F5F9; }

@@ -1,0 +1,131 @@
+/* moved from legacy index.html <style> */
+.form-row { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; gap: 12px !important; width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
+.form-row > * { min-width: 0 !important; max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
+.form-row input, .form-row select, .form-row .cal-trigger-field { width: 100% !important; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box !important; text-overflow: ellipsis; }
+html, body, #root { overflow-x: hidden !important; max-width: 100vw !important; width: 100% !important; min-width: 0 !important; }
+.app-container { width: 100% !important; max-width: 100vw !important; min-width: 0 !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+.main-content { flex: 1 1 0 !important; min-width: 0 !important; max-width: 100% !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+.form-page { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; overflow-x: hidden !important; }
+.form-group { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
+.form-input { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+.form-page {
+  flex: 1;
+  padding: var(--spacing-lg);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.form-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.form-input-error {
+  border: 1.5px solid #EF4444;
+}
+
+.form-error-text {
+  color: #EF4444;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.form-label-required {
+  color: #EF4444;
+  margin-left: 2px;
+}
+
+.form-select {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239E9E9E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.form-row > * {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-row input,
+.form-row .cal-trigger-field,
+.form-row select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.form-submit {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: var(--color-button-primary);
+  color: var(--color-text-white);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.form-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-sm);
+}
