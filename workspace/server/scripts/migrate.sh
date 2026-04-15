@@ -33,7 +33,7 @@ for file in $(ls "$MIGRATIONS_DIR"/*.sql 2>/dev/null | sort); do
   fi
 
   echo "  [run]  $version"
-  sudo -u postgres psql -d "$DB_NAME" -v ON_ERROR_STOP=1 -f "$file"
+  sudo -u postgres psql -d "$DB_NAME" -v ON_ERROR_STOP=1 < "$file"
   sudo -u postgres psql -d "$DB_NAME" -c "INSERT INTO schema_migrations (version) VALUES ('$version');" > /dev/null
   applied=$((applied+1))
 done
