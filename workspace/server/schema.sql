@@ -78,7 +78,7 @@ CREATE TABLE comments (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 숙소
+-- 숙소 (여행 1건당 복수 숙소 허용 — UNIQUE(trip_id) 없음)
 CREATE TABLE accommodations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
@@ -91,9 +91,15 @@ CREATE TABLE accommodations (
   price_per_person DECIMAL(12, 2) DEFAULT 0,
   currency CHAR(3) NOT NULL DEFAULT 'KRW',
   exchange_rate DECIMAL(12, 6) DEFAULT 1,
-  created_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE(trip_id)
+  check_in_date DATE,
+  check_out_date DATE,
+  created_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Migration (기존 DB 적용):
+-- ALTER TABLE accommodations ADD COLUMN IF NOT EXISTS check_in_date DATE;
+-- ALTER TABLE accommodations ADD COLUMN IF NOT EXISTS check_out_date DATE;
+-- ALTER TABLE accommodations DROP CONSTRAINT IF EXISTS accommodations_trip_id_key;
 
 -- Refresh Token
 CREATE TABLE refresh_tokens (
