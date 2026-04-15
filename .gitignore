@@ -41,3 +41,4 @@ Triplog_icon.png
 *.log
 .env
 .env.local
+.deploy.env
