@@ -28,7 +28,9 @@ export function AuthProvider({ children }) {
     const res = await fetch(API_BASE + endpoint, opts);
 
     // 401 -> try refresh (only once)
-    if (res.status === 401 && !_isRetry && endpoint !== '/auth/refresh') {
+    // 단, 로그인/회원가입/리프레시 자체는 제외 (자격증명 실패이지 세션 만료가 아님)
+    const isAuthEntry = endpoint === '/auth/refresh' || endpoint === '/auth/login' || endpoint === '/auth/register';
+    if (res.status === 401 && !_isRetry && !isAuthEntry) {
       const refreshRes = await fetch(API_BASE + '/auth/refresh', {
         method: 'POST',
         credentials: 'include',
