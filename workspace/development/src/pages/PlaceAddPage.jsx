@@ -14,6 +14,8 @@ import DateRangeCalendar from '../components/DateRangeCalendar';
 import CurrencyDropdown from '../components/CurrencyDropdown';
 import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import AccomCard from '../components/AccomCard';
+import TimePickerModal from '../components/TimePickerModal';
+import '../styles/timepicker.css';
 export default function PlaceAddPage() {
   const { path, navigate, goBack } = useRouter();
   const toast = useToast();
@@ -37,6 +39,7 @@ export default function PlaceAddPage() {
   const [selectedLng, setSelectedLng] = useState(null);
   const debounceRef = useRef(null);
   const [accommodations, setAccommodations] = useState([]);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   useEffect(() => {
     if (isEdit && params) {
@@ -212,9 +215,27 @@ export default function PlaceAddPage() {
       ),
       React.createElement('div', { className: 'form-group' },
         React.createElement('label', { className: 'form-label' }, '\uBC29\uBB38 \uC2DC\uAC04'),
-        React.createElement('input', {
-          className: 'form-input', type: 'time', placeholder: '\uC608: 14:00',
-          value: visitTime, onChange: e => setVisitTime(e.target.value)
+        React.createElement('div', {
+          className: 'form-input tp-trigger' + (visitTime ? '' : ' tp-trigger-empty'),
+          onClick: () => setShowTimePicker(true)
+        },
+          React.createElement('span', { style: { flex: 1 } }, visitTime
+            ? (() => {
+                const [h, m] = visitTime.split(':').map(Number);
+                const p = h >= 12 ? 'PM' : 'AM';
+                const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+                return `${p} ${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+              })()
+            : '\uC2DC\uAC04 \uC120\uD0DD'),
+          visitTime && React.createElement('button', {
+            type: 'button', className: 'search-clear-btn',
+            onClick: (e) => { e.stopPropagation(); setVisitTime(''); }
+          }, '\u2715')
+        ),
+        showTimePicker && React.createElement(TimePickerModal, {
+          value: visitTime,
+          onChange: setVisitTime,
+          onClose: () => setShowTimePicker(false)
         })
       ),
       React.createElement('div', { className: 'form-group' },

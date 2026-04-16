@@ -1,0 +1,165 @@
+/* ============================================
+   TimePickerModal — TripLog 대표색(#333) 기반
+   ============================================ */
+
+.tp-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.tp-modal {
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 280px;
+  box-shadow: var(--shadow-elevated);
+}
+
+.tp-title {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: 20px;
+}
+
+/* Time display row */
+.tp-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.tp-input {
+  width: 72px;
+  height: 64px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text-primary);
+  outline: none;
+  font-family: var(--font-family);
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.tp-input:focus {
+  border-color: var(--color-button-primary);
+  background: var(--color-bg);
+  color: var(--color-button-primary);
+}
+
+.tp-colon {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  padding: 0 2px;
+}
+
+/* AM/PM toggle */
+.tp-period {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.tp-period-btn {
+  padding: 8px 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+  transition: background 0.15s, color 0.15s;
+}
+
+.tp-period-btn + .tp-period-btn {
+  border-top: 1px solid var(--color-border);
+}
+
+.tp-period-active {
+  background: var(--color-button-primary);
+  color: var(--color-text-white);
+}
+
+/* Labels */
+.tp-labels {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.tp-labels span {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.tp-labels span:nth-child(1) {
+  width: 72px;
+  text-align: center;
+}
+
+.tp-labels span:nth-child(2) {
+  width: 72px;
+  text-align: center;
+  margin-left: 12px;
+}
+
+/* Actions */
+.tp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.tp-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  background: transparent;
+}
+
+.tp-btn-cancel {
+  color: var(--color-text-secondary);
+}
+
+.tp-btn-cancel:active {
+  background: var(--color-bg-secondary);
+}
+
+.tp-btn-ok {
+  color: var(--color-button-primary);
+}
+
+.tp-btn-ok:active {
+  background: var(--color-bg-secondary);
+}
+
+/* Trigger (form-input 위에 커서 포인터 추가) */
+.tp-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  position: relative;
+}
+
+.tp-trigger-empty {
+  color: var(--color-text-secondary);
+}
