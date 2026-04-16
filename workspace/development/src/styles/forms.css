@@ -156,3 +156,7 @@ html, body, #root { overflow-x: hidden !important; max-width: 100vw !important; 
   font-size: 12px;
   color: #9E9E9E;
 }
+
+.schedule-create-with-floating {
+  padding-bottom: 100px;
+}

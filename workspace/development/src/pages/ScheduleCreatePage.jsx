@@ -144,7 +144,7 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
         React.createElement('span', { className: 'topbar-title' }, '\uC77C\uC790\uBCC4 \uC77C\uC815 \uC0DD\uC131')
       )
     ),
-    React.createElement('div', { className: 'trip-detail-page' },
+    React.createElement('div', { className: 'trip-detail-page schedule-create-with-floating' },
       // Day 탭
       React.createElement('div', { className: 'day-tabs' },
         days.map((day, i) => React.createElement('button', {
@@ -222,9 +222,14 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
       // 지도 (항시 펼침)
       React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms }),
 
-      // 여행 만들기 버튼
+      // 지도 아래 여백 (플로팅 버튼 가림 방지)
+      null
+    ),
+
+    // 여행 만들기 플로팅 버튼
+    React.createElement('div', { className: 'trip-create-floating-submit' },
       React.createElement('button', {
-        className: 'form-submit', style: { margin: '24px 0' },
+        className: 'form-submit',
         onClick: handleComplete
       }, '\uC5EC\uD589 \uB9CC\uB4E4\uAE30')
     ),
