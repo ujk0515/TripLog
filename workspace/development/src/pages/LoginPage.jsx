@@ -67,6 +67,9 @@ export default function LoginPage() {
           className: 'auth-btn', type: 'submit', disabled: loading
         }, loading ? React.createElement(Spinner) : '\uB85C\uADF8\uC778'),
       ),
+      React.createElement('div', { className: 'auth-forgot-link' },
+        React.createElement('a', { onClick: () => navigate('/forgot-password') }, '비밀번호를 잊으셨나요?')
+      ),
       React.createElement('div', { className: 'auth-link' },
         '\uACC4\uC815\uC774 \uC5C6\uC73C\uC2E0\uAC00\uC694? ',
         React.createElement('a', { onClick: () => navigate('/register') }, '\uD68C\uC6D0\uAC00\uC785 \u2192')

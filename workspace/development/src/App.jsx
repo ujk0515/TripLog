@@ -16,6 +16,9 @@ import ExpenseAddPage from './pages/ExpenseAddPage';
 import ScheduleCreatePage from './pages/ScheduleCreatePage';
 import AccommodationDetailPage from './pages/AccommodationDetailPage';
 import ShareViewPage from './pages/ShareViewPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import VerifyCodePage from './pages/VerifyCodePage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 export default function App() {
   const { user, appState, retryConnection } = useAuth();
@@ -35,6 +38,9 @@ export default function App() {
   // Not logged in
   if (!user) {
     if (path === '/register') return React.createElement(RegisterPage);
+    if (path === '/forgot-password') return React.createElement(ForgotPasswordPage);
+    if (path === '/forgot-password/verify') return React.createElement(VerifyCodePage);
+    if (path === '/forgot-password/reset') return React.createElement(ResetPasswordPage);
     return React.createElement(LoginPage);
   }
 

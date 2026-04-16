@@ -110,6 +110,17 @@ CREATE TABLE refresh_tokens (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- 비밀번호 재설정 인증코드
+CREATE TABLE password_reset_codes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  email VARCHAR(255) NOT NULL,
+  code VARCHAR(6) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- ============================================================
 -- Indexes
 -- ============================================================
@@ -119,3 +130,4 @@ CREATE INDEX idx_comments_trip_id ON comments(trip_id);
 CREATE INDEX idx_accommodations_trip_id ON accommodations(trip_id);
 CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
 CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
+CREATE INDEX idx_reset_codes_email ON password_reset_codes(email);
