@@ -16,13 +16,16 @@ router.get('/', requireAuth, async (req, res, next) => {
   try {
     const result = await req.db.query(
       `SELECT t.*,
-        COUNT(DISTINCT p.id) AS place_count,
-        COALESCE(SUM(e.amount * e.exchange_rate), 0) AS total_expense_krw
+        COALESCE(pc.cnt, 0) AS place_count,
+        COALESCE(ec.total_krw, 0) AS total_expense_krw
        FROM trips t
-       LEFT JOIN places p ON p.trip_id = t.id
-       LEFT JOIN expenses e ON e.trip_id = t.id
+       LEFT JOIN (
+         SELECT trip_id, COUNT(*) AS cnt FROM places GROUP BY trip_id
+       ) pc ON pc.trip_id = t.id
+       LEFT JOIN (
+         SELECT trip_id, SUM(amount * exchange_rate) AS total_krw FROM expenses GROUP BY trip_id
+       ) ec ON ec.trip_id = t.id
        WHERE t.user_id = $1
-       GROUP BY t.id
        ORDER BY t.created_at DESC`,
       [req.user.id]
     );
@@ -101,13 +104,16 @@ router.get('/:id', requireAuth, async (req, res, next) => {
   try {
     const result = await req.db.query(
       `SELECT t.*,
-        COUNT(DISTINCT p.id) AS place_count,
-        COALESCE(SUM(e.amount * e.exchange_rate), 0) AS total_expense_krw
+        COALESCE(pc.cnt, 0) AS place_count,
+        COALESCE(ec.total_krw, 0) AS total_expense_krw
        FROM trips t
-       LEFT JOIN places p ON p.trip_id = t.id
-       LEFT JOIN expenses e ON e.trip_id = t.id
-       WHERE t.id = $1 AND t.user_id = $2
-       GROUP BY t.id`,
+       LEFT JOIN (
+         SELECT trip_id, COUNT(*) AS cnt FROM places GROUP BY trip_id
+       ) pc ON pc.trip_id = t.id
+       LEFT JOIN (
+         SELECT trip_id, SUM(amount * exchange_rate) AS total_krw FROM expenses GROUP BY trip_id
+       ) ec ON ec.trip_id = t.id
+       WHERE t.id = $1 AND t.user_id = $2`,
       [req.params.id, req.user.id]
     );
     if (result.rows.length === 0) {
