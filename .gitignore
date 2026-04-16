@@ -10,6 +10,9 @@ workspace/planning/
 workspace/reports/
 workspace/testing/
 workspace/design/
+workspace/claims/
+workspace/evidence/
+workspace/tickets/
 workspace/.claude/
 
 # ===== 서버 내 에이전트/민감정보 =====

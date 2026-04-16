@@ -4,7 +4,7 @@ import { matchRoute, useRouter } from '../contexts/RouterContext';
 import { useToast } from '../contexts/ToastContext';
 import { CATEGORIES, COUNTRIES, CURRENCIES } from '../utils/constants';
 import { searchNominatim } from '../utils/search';
-import { formatCurrency, formatDate, formatDualAmount, formatDualCurrency, formatRateTime, getCountryByCode, getDayAccommodations, getDaysBetween, isTripPast, normalizeDate, parsePlaceName } from '../utils/helpers';
+import { copyToClipboard, formatCurrency, formatDate, formatDualAmount, formatDualCurrency, formatRateTime, getCountryByCode, getDayAccommodations, getDaysBetween, isTripPast, normalizeDate, parsePlaceName } from '../utils/helpers';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
 import Spinner from '../components/Spinner';
 import Modal from '../components/Modal';
@@ -125,7 +125,7 @@ export default function AccommodationDetailPage() {
           addrPart = commaIdx >= 0 ? rawName.slice(commaIdx + 1).trim() : '';
         }
         const copyToClip = (text, field) => {
-          navigator.clipboard.writeText(text).then(() => {
+          copyToClipboard(text).then(() => {
             setCopiedField(field);
             toast('\uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4');
             setTimeout(() => setCopiedField(null), 2000);

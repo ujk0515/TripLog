@@ -4,7 +4,7 @@ import { matchRoute, useRouter } from '../contexts/RouterContext';
 import { useToast } from '../contexts/ToastContext';
 import { API_BASE, CATEGORIES, COUNTRIES, CURRENCIES } from '../utils/constants';
 import { searchNominatim } from '../utils/search';
-import { formatCurrency, formatDate, formatDualAmount, formatDualCurrency, formatRateTime, getCountryByCode, getDayAccommodations, getDaysBetween, isTripPast, normalizeDate, parsePlaceName } from '../utils/helpers';
+import { copyToClipboard, formatCurrency, formatDate, formatDualAmount, formatDualCurrency, formatRateTime, getCountryByCode, getDayAccommodations, getDaysBetween, isTripPast, normalizeDate, parsePlaceName } from '../utils/helpers';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
 import Spinner from '../components/Spinner';
 import Modal from '../components/Modal';
@@ -183,7 +183,7 @@ export default function TripDetailPage({ onSelectTrip }) {
 
   const handleShareKakao = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await copyToClipboard(shareUrl);
       toast('\uB9C1\uD06C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uCE74\uCE74\uC624\uD1A1\uC5D0 \uBD99\uC5EC\uB123\uAE30 \uD558\uC138\uC694');
     } catch (e) {
       toast('\uBCF5\uC0AC\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4');
@@ -198,7 +198,7 @@ export default function TripDetailPage({ onSelectTrip }) {
 
   const handleShareCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await copyToClipboard(shareUrl);
       toast('\uACF5\uC720 \uB9C1\uD06C\uAC00 \uBCF5\uC0AC\uB418\uC5C8\uC2B5\uB2C8\uB2E4');
     } catch (e) {
       toast('\uBCF5\uC0AC\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4');

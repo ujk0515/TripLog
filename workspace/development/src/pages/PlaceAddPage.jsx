@@ -36,6 +36,7 @@ export default function PlaceAddPage() {
   const [selectedLat, setSelectedLat] = useState(null);
   const [selectedLng, setSelectedLng] = useState(null);
   const debounceRef = useRef(null);
+  const [accommodations, setAccommodations] = useState([]);
 
   useEffect(() => {
     if (isEdit && params) {
@@ -51,7 +52,15 @@ export default function PlaceAddPage() {
         }
       }).finally(() => setFetching(false));
     }
+    // 숙소 데이터 로드 (R18)
+    if (params?.tripId) {
+      apiCall('GET', `/trips/${params.tripId}/accommodations`)
+        .then(data => setAccommodations(Array.isArray(data) ? data : []))
+        .catch(() => setAccommodations([]));
+    }
   }, []);
+
+  const dayAccoms = getDayAccommodations(params?.date, accommodations);
 
   const handleNameChange = (e) => {
     const val = e.target.value;
@@ -138,6 +147,33 @@ export default function PlaceAddPage() {
           disabled: true
         }),
         errors.date && React.createElement('div', { className: 'form-error-text' }, errors.date)
+      ),
+      // 숙소 정보 카드 (R18)
+      React.createElement('div', { className: 'place-add-accom-section' },
+        React.createElement('label', { className: 'place-add-accom-label' }, '\uC219\uC18C'),
+        (() => {
+          const { out, in: inn, normal } = dayAccoms;
+          if (out && inn) {
+            return React.createElement('div', { className: 'accom-split' },
+              React.createElement(AccomCard, { accom: out, variant: 'out',
+                onClick: () => navigate(`/trip/${params.tripId}/accommodation/${out.id}`) }),
+              React.createElement('div', { className: 'accom-arrow' }, '\u2192'),
+              React.createElement(AccomCard, { accom: inn, variant: 'in',
+                onClick: () => navigate(`/trip/${params.tripId}/accommodation/${inn.id}`) })
+            );
+          }
+          if (out) return React.createElement(AccomCard, { accom: out, variant: 'out',
+            onClick: () => navigate(`/trip/${params.tripId}/accommodation/${out.id}`) });
+          if (inn) return React.createElement(AccomCard, { accom: inn, variant: 'in',
+            onClick: () => navigate(`/trip/${params.tripId}/accommodation/${inn.id}`) });
+          if (normal) return React.createElement(AccomCard, { accom: normal, variant: 'normal',
+            onClick: () => navigate(`/trip/${params.tripId}/accommodation/${normal.id}`) });
+          // 빈 상태 — 항상 노출
+          return React.createElement('div', { className: 'place-add-accom-empty' },
+            React.createElement('span', null, '\uD83C\uDF41'),
+            React.createElement('span', null, '\uC219\uC18C\uAC00 \uBE44\uC5B4 \uC788\uC2B5\uB2C8\uB2E4')
+          );
+        })()
       ),
       React.createElement('div', { className: 'form-group' },
         React.createElement('label', { className: 'form-label' },

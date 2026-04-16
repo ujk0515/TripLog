@@ -211,6 +211,29 @@
   padding: 4px 8px;
 }
 
+/* PlaceAddPage 숙소 정보 섹션 (R18) */
+.place-add-accom-section {
+  margin-bottom: 24px;
+}
+
+.place-add-accom-label {
+  display: block;
+  font-size: 12px;
+  color: #9E9E9E;
+  margin-bottom: 8px;
+}
+
+.place-add-accom-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #F5F5F5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #9E9E9E;
+}
+
 /* ============================================
    Date Range Calendar  (design_trip_create 기준)
    ============================================ */

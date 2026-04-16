@@ -78,3 +78,19 @@ export function parsePlaceName(name) {
     addr: ci >= 0 ? name.slice(ci + 1).trim() : ''
   };
 }
+
+// HTTP 환경에서도 동작하는 클립보드 복사
+export async function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  // fallback: textarea 방식
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
