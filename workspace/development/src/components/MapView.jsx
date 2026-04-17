@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 
-export default function MapView({ places, accommodation, dayAccommodations }) {
+export default function MapView({ places, accommodation, dayAccommodations, onRouteInfo }) {
   const mapRef = useRef(null);
   const leafletMapRef = useRef(null);
   const markersRef = useRef([]);
@@ -125,29 +125,35 @@ export default function MapView({ places, accommodation, dayAccommodations }) {
 
     const routeOrigins = [];
     if (outAccom && outAccom.accom.lat && outAccom.accom.lng) {
-      routeOrigins.push({ coord: [Number(outAccom.accom.lat), Number(outAccom.accom.lng)], colors: ['#EF4444', '#F97316', '#DC2626', '#E11D48', '#B91C1C'] });
+      routeOrigins.push({ coord: [Number(outAccom.accom.lat), Number(outAccom.accom.lng)], variant: 'out', colors: ['#EF4444', '#F97316', '#DC2626', '#E11D48', '#B91C1C'] });
     }
     if (inAccom && inAccom.accom.lat && inAccom.accom.lng) {
-      routeOrigins.push({ coord: [Number(inAccom.accom.lat), Number(inAccom.accom.lng)], colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
+      routeOrigins.push({ coord: [Number(inAccom.accom.lat), Number(inAccom.accom.lng)], variant: 'in', colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
     }
     if (routeOrigins.length === 0 && normalAccom && normalAccom.accom.lat && normalAccom.accom.lng) {
-      routeOrigins.push({ coord: [Number(normalAccom.accom.lat), Number(normalAccom.accom.lng)], colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
+      routeOrigins.push({ coord: [Number(normalAccom.accom.lat), Number(normalAccom.accom.lng)], variant: 'normal', colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
     }
 
     if (routeOrigins.length > 0 && validPlaces.length > 0) {
-      routeOrigins.forEach(({ coord: originCoord, colors }) => {
+      routeOrigins.forEach(({ coord: originCoord, colors, variant }) => {
         validPlaces.forEach((p, i) => {
           const placeCoord = [Number(p.lat), Number(p.lng)];
           const color = colors[i % colors.length];
-          const cacheKey = `route_${originCoord[0]}_${originCoord[1]}_${placeCoord[0]}_${placeCoord[1]}`;
+          const cacheKey = `route2_${originCoord[0]}_${originCoord[1]}_${placeCoord[0]}_${placeCoord[1]}`;
+
+          const emitInfo = (distance, duration) => {
+            if (onRouteInfo) onRouteInfo({ placeId: p.id, variant, distance, duration });
+          };
 
           // localStorage 캐시 확인
           const cached = localStorage.getItem(cacheKey);
           if (cached) {
             try {
-              const coords = JSON.parse(cached);
+              const parsed = JSON.parse(cached);
+              const coords = parsed.coords || parsed;
               const line = L.polyline(coords, { color, weight: 4, opacity: 0.9 }).addTo(map);
               routeLinesRef.current.push(line);
+              if (parsed.distance != null) emitInfo(parsed.distance, parsed.duration);
               return;
             } catch { localStorage.removeItem(cacheKey); }
           }
@@ -157,10 +163,12 @@ export default function MapView({ places, accommodation, dayAccommodations }) {
             .then(res => res.json())
             .then(data => {
               if (data.routes && data.routes[0] && data.routes[0].geometry) {
-                const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
-                localStorage.setItem(cacheKey, JSON.stringify(coords));
+                const route = data.routes[0];
+                const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+                localStorage.setItem(cacheKey, JSON.stringify({ coords, distance: route.distance, duration: route.duration }));
                 const line = L.polyline(coords, { color, weight: 4, opacity: 0.9 }).addTo(map);
                 routeLinesRef.current.push(line);
+                emitInfo(route.distance, route.duration);
               } else {
                 const line = L.polyline([originCoord, placeCoord], { color, weight: 4, opacity: 0.9 }).addTo(map);
                 routeLinesRef.current.push(line);

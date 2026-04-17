@@ -28,6 +28,16 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
   const [selectedDay, setSelectedDay] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 경로 정보 (거리/시간)
+  const [routeInfoMap, setRouteInfoMap] = useState({});
+  const handleRouteInfo = useCallback(({ placeId, variant, distance, duration }) => {
+    setRouteInfoMap(prev => {
+      const key = `${placeId}_${variant}`;
+      if (prev[key]?.distance === distance) return prev;
+      return { ...prev, [key]: { distance, duration } };
+    });
+  }, []);
+
   // 장소 검색
   const [searchName, setSearchName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -150,7 +160,7 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
         days.map((day, i) => React.createElement('button', {
           key: day.date,
           className: `day-tab ${selectedDay === day.date ? 'active' : ''}`,
-          onClick: () => setSelectedDay(day.date)
+          onClick: () => { setSelectedDay(day.date); setRouteInfoMap({}); }
         }, `Day ${i + 1}`))
       ),
 
@@ -175,10 +185,21 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
         React.createElement('div', { className: 'place-section-title' }, '\uC7A5\uC18C \uCD94\uAC00'),
         dayPlaces.map((place, idx) => {
           const { short: sn, addr: sa } = parsePlaceName(place.name);
+          const fmtRoute = (ri) => {
+            const d = ri.distance >= 1000 ? (ri.distance / 1000).toFixed(1) + 'km' : Math.round(ri.distance) + 'm';
+            const t = ri.duration >= 3600 ? Math.floor(ri.duration / 3600) + '시간 ' + Math.round((ri.duration % 3600) / 60) + '분' : Math.round(ri.duration / 60) + '분';
+            return `(거리: 약 ${d} / 시간: 약 ${t})`;
+          };
+          const riOut = routeInfoMap[`${place.id}_out`];
+          const riIn = routeInfoMap[`${place.id}_in`];
+          const riNormal = routeInfoMap[`${place.id}_normal`];
           return React.createElement('div', { key: place.id, className: 'place-card' },
             React.createElement('div', { className: 'place-number' }, idx + 1),
             React.createElement('div', { className: 'place-info' },
               React.createElement('div', { className: 'place-name' }, sn),
+              riOut && React.createElement('div', { className: 'place-route-info', style: { color: '#EF4444' } }, fmtRoute(riOut)),
+              riIn && React.createElement('div', { className: 'place-route-info', style: { color: '#2563EB' } }, fmtRoute(riIn)),
+              riNormal && !riOut && !riIn && React.createElement('div', { className: 'place-route-info' }, fmtRoute(riNormal)),
               sa && React.createElement('div', { className: 'place-addr' }, sa)
             ),
             React.createElement('div', { className: 'place-actions' },
@@ -220,10 +241,10 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
       ),
 
       // 지도 (항시 펼침)
-      React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms }),
+      React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms, onRouteInfo: handleRouteInfo }),
 
       // 지도 아래 여백 (플로팅 버튼 가림 방지)
-      null
+      React.createElement('div', { style: { height: 80 } })
     ),
 
     // 여행 만들기 플로팅 버튼
