@@ -1,5 +1,6 @@
 # ===== 하네스 / 에이전트 (루트) =====
 .claude/
+.claude/skills/
 workflow/
 /package.json
 /package-lock.json
