@@ -17,20 +17,24 @@ export default function ResetPasswordPage() {
 
   const email = sessionStorage.getItem('resetEmail');
   const resetToken = sessionStorage.getItem('resetToken');
+  const successRef = React.useRef(false);
 
   // Redirect if missing prerequisites
   useEffect(() => {
     if (!email || !resetToken) {
-      navigate('/forgot-password');
+      if (!successRef.current) {
+        navigate('/forgot-password');
+      }
     }
   }, [email, resetToken, navigate]);
 
   // Block back navigation
+  const blockBackRef = React.useRef(null);
   useEffect(() => {
     const blockBack = () => {
       window.history.replaceState(null, '', window.location.href);
     };
-    // Push a state so popstate fires
+    blockBackRef.current = blockBack;
     window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', blockBack);
     return () => window.removeEventListener('popstate', blockBack);
@@ -67,19 +71,19 @@ export default function ResetPasswordPage() {
         throw new Error(data.message || '비밀번호 변경 실패');
       }
 
+      successRef.current = true;
+
       // Clean up sessionStorage
       sessionStorage.removeItem('resetEmail');
       sessionStorage.removeItem('resetToken');
 
-      // Navigate to login with toast
-      toast('비밀번호가 정상적으로 변경되었습니다.');
+      // Remove back-block listener before navigating
+      if (blockBackRef.current) {
+        window.removeEventListener('popstate', blockBackRef.current);
+      }
 
-      // Use replaceState to prevent back navigation to reset page
+      toast('비밀번호가 정상적으로 변경되었습니다.');
       navigate('/login');
-      // Replace the hash history entry to block back
-      setTimeout(() => {
-        window.history.replaceState(null, '', window.location.href);
-      }, 100);
     } catch (err) {
       setError(err.message || '비밀번호 변경 실패');
     } finally {

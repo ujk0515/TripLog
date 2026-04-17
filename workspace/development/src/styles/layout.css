@@ -219,6 +219,7 @@
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
+  white-space: nowrap;
   z-index: 2000;
   opacity: 0;
   transition: opacity 0.3s;
