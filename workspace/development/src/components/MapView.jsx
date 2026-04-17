@@ -118,49 +118,61 @@ export default function MapView({ places, accommodation, dayAccommodations }) {
       latlngs.push([Number(p.lat), Number(p.lng)]);
     });
 
-    // Draw route lines: 숙소 → 각 장소 (OSRM 차량 경로, 실패 시 직선)
-    const accomCoord = accomEntries.length > 0 && accomEntries[0].accom.lat && accomEntries[0].accom.lng
-      ? [Number(accomEntries[0].accom.lat), Number(accomEntries[0].accom.lng)]
-      : null;
+    // Draw route lines: 숙소(Out/In 각각) → 각 장소 (OSRM 차량 경로, 실패 시 직선)
+    const outAccom = accomEntries.find(e => e.variant === 'out');
+    const inAccom = accomEntries.find(e => e.variant === 'in');
+    const normalAccom = accomEntries.find(e => e.variant === 'normal');
 
-    if (accomCoord && validPlaces.length > 0) {
-      const routeColors = ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'];
-      validPlaces.forEach((p, i) => {
-        const placeCoord = [Number(p.lat), Number(p.lng)];
-        const color = routeColors[i % routeColors.length];
-        const cacheKey = `route_${accomCoord[0]}_${accomCoord[1]}_${placeCoord[0]}_${placeCoord[1]}`;
+    const routeOrigins = [];
+    if (outAccom && outAccom.accom.lat && outAccom.accom.lng) {
+      routeOrigins.push({ coord: [Number(outAccom.accom.lat), Number(outAccom.accom.lng)], colors: ['#EF4444', '#F97316', '#DC2626', '#E11D48', '#B91C1C'] });
+    }
+    if (inAccom && inAccom.accom.lat && inAccom.accom.lng) {
+      routeOrigins.push({ coord: [Number(inAccom.accom.lat), Number(inAccom.accom.lng)], colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
+    }
+    if (routeOrigins.length === 0 && normalAccom && normalAccom.accom.lat && normalAccom.accom.lng) {
+      routeOrigins.push({ coord: [Number(normalAccom.accom.lat), Number(normalAccom.accom.lng)], colors: ['#2563EB', '#7C3AED', '#0891B2', '#059669', '#D97706'] });
+    }
 
-        // localStorage 캐시 확인
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-          try {
-            const coords = JSON.parse(cached);
-            const line = L.polyline(coords, { color, weight: 4, opacity: 0.9 }).addTo(map);
-            routeLinesRef.current.push(line);
-            return;
-          } catch { localStorage.removeItem(cacheKey); }
-        }
+    if (routeOrigins.length > 0 && validPlaces.length > 0) {
+      routeOrigins.forEach(({ coord: originCoord, colors }) => {
+        validPlaces.forEach((p, i) => {
+          const placeCoord = [Number(p.lat), Number(p.lng)];
+          const color = colors[i % colors.length];
+          const cacheKey = `route_${originCoord[0]}_${originCoord[1]}_${placeCoord[0]}_${placeCoord[1]}`;
 
-        // 캐시 없으면 OSRM 1회 요청 → 저장
-        fetch(`https://router.project-osrm.org/route/v1/driving/${accomCoord[1]},${accomCoord[0]};${placeCoord[1]},${placeCoord[0]}?overview=full&geometries=geojson`)
-          .then(res => res.json())
-          .then(data => {
-            if (data.routes && data.routes[0] && data.routes[0].geometry) {
-              const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
-              localStorage.setItem(cacheKey, JSON.stringify(coords));
+          // localStorage 캐시 확인
+          const cached = localStorage.getItem(cacheKey);
+          if (cached) {
+            try {
+              const coords = JSON.parse(cached);
               const line = L.polyline(coords, { color, weight: 4, opacity: 0.9 }).addTo(map);
               routeLinesRef.current.push(line);
-            } else {
-              const line = L.polyline([accomCoord, placeCoord], { color, weight: 4, opacity: 0.9 }).addTo(map);
+              return;
+            } catch { localStorage.removeItem(cacheKey); }
+          }
+
+          // 캐시 없으면 OSRM 1회 요청 → 저장
+          fetch(`https://router.project-osrm.org/route/v1/driving/${originCoord[1]},${originCoord[0]};${placeCoord[1]},${placeCoord[0]}?overview=full&geometries=geojson`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.routes && data.routes[0] && data.routes[0].geometry) {
+                const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+                localStorage.setItem(cacheKey, JSON.stringify(coords));
+                const line = L.polyline(coords, { color, weight: 4, opacity: 0.9 }).addTo(map);
+                routeLinesRef.current.push(line);
+              } else {
+                const line = L.polyline([originCoord, placeCoord], { color, weight: 4, opacity: 0.9 }).addTo(map);
+                routeLinesRef.current.push(line);
+              }
+            })
+            .catch(() => {
+              const line = L.polyline([originCoord, placeCoord], { color, weight: 4, opacity: 0.9 }).addTo(map);
               routeLinesRef.current.push(line);
-            }
-          })
-          .catch(() => {
-            const line = L.polyline([accomCoord, placeCoord], { color, weight: 4, opacity: 0.9 }).addTo(map);
-            routeLinesRef.current.push(line);
-          });
+            });
+        });
       });
-    } else if (latlngs.length > 1 && !accomCoord) {
+    } else if (latlngs.length > 1 && routeOrigins.length === 0) {
       // 숙소 없으면 기존처럼 장소 간 직선
       const line = L.polyline(latlngs, { color: '#333', weight: 4, opacity: 0.9 }).addTo(map);
       routeLinesRef.current.push(line);
