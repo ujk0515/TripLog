@@ -65,6 +65,8 @@ export default function MapView({ places, accommodation, dayAccommodations, onRo
   useEffect(() => {
     const map = leafletMapRef.current;
     if (!map) return;
+    // display:none 상태면 Leaflet 좌표 계산 불가 — 스킵
+    if (!mapRef.current || mapRef.current.offsetParent === null) return;
 
     // Clear existing markers
     markersRef.current.forEach(m => map.removeLayer(m));

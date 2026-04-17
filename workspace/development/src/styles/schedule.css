@@ -1,5 +1,19 @@
 /* Schedule Create Page */
 .schedule-places { padding: 0 0 16px; }
+.place-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.place-section-header .place-section-title {
+  flex-shrink: 0;
+}
+.place-section-notice {
+  font-size: 10px;
+  color: #F87171;
+  white-space: pre-line;
+}
 .place-order-btn {
   width: 28px;
   height: 24px;

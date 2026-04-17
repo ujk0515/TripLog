@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { matchRoute, useRouter } from '../contexts/RouterContext';
 import { useToast } from '../contexts/ToastContext';
@@ -33,6 +33,7 @@ export default function TripDetailPage({ onSelectTrip }) {
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
   const [accommodations, setAccommodations] = useState([]);
+  const [routeReady, setRouteReady] = useState(0);
 
   const memoTimerRef = useRef(null);
   const ptrContainerRef = useRef(null);
@@ -84,7 +85,41 @@ export default function TripDetailPage({ onSelectTrip }) {
         const dayObj = normalizedDays.find(d => d.date === targetDay);
         setDayMemo(dayObj?.memo || '');
       }
+      // 경로 정보 미리 계산 (OSRM)
+      prefetchRoutes(normalizedPlaces, normalizedDays, Array.isArray(accomData) ? accomData : []);
     } catch(e) {} finally { setLoading(false); }
+  };
+
+  const prefetchRoutes = (allPlaces, allDays, allAccoms) => {
+    const fetches = [];
+    allDays.forEach(day => {
+      const dp = allPlaces.filter(p => p.date === day.date);
+      if (!dp.length) return;
+      const da = getDayAccommodations(day.date, allAccoms);
+      const origins = [];
+      if (da.out?.lat && da.out?.lng) origins.push([Number(da.out.lat), Number(da.out.lng)]);
+      if (da.in?.lat && da.in?.lng) origins.push([Number(da.in.lat), Number(da.in.lng)]);
+      if (origins.length === 0 && da.normal?.lat && da.normal?.lng) origins.push([Number(da.normal.lat), Number(da.normal.lng)]);
+      origins.forEach(coord => {
+        dp.forEach(p => {
+          if (!p.lat || !p.lng) return;
+          const cacheKey = `route2_${coord[0]}_${coord[1]}_${Number(p.lat)}_${Number(p.lng)}`;
+          if (localStorage.getItem(cacheKey)) return;
+          fetches.push(
+            fetch(`https://router.project-osrm.org/route/v1/driving/${coord[1]},${coord[0]};${Number(p.lng)},${Number(p.lat)}?overview=full&geometries=geojson`)
+              .then(r => r.json())
+              .then(data => {
+                if (data.routes?.[0]) {
+                  const route = data.routes[0];
+                  const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+                  localStorage.setItem(cacheKey, JSON.stringify({ coords, distance: route.distance, duration: route.duration }));
+                }
+              }).catch(() => {})
+          );
+        });
+      });
+    });
+    if (fetches.length) Promise.all(fetches).then(() => setRouteReady(v => v + 1));
   };
 
   const handlePullRefresh = useCallback(async () => {
@@ -258,6 +293,20 @@ export default function TripDetailPage({ onSelectTrip }) {
   const dayPlaces = places.filter(p => p.date === selectedDay).sort((a,b) => a.order_index - b.order_index);
   const dayAccoms = getDayAccommodations(selectedDay, accommodations);
 
+  const getRouteInfo = (placeId, lat, lng, variant, accomLat, accomLng) => {
+    if (!lat || !lng || !accomLat || !accomLng) return null;
+    const cacheKey = `route2_${accomLat}_${accomLng}_${Number(lat)}_${Number(lng)}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed.distance != null) return parsed;
+      }
+    } catch {}
+    return null;
+  };
+
+
   return React.createElement(React.Fragment, null,
     React.createElement('div', { className: 'topbar' },
       React.createElement('div', { className: 'topbar-left' },
@@ -367,10 +416,21 @@ export default function TripDetailPage({ onSelectTrip }) {
                     const commaIdx = rawName.indexOf(',');
                     const shortName = commaIdx >= 0 ? rawName.slice(0, commaIdx).trim() : rawName;
                     const addrPart = commaIdx >= 0 ? rawName.slice(commaIdx + 1).trim() : '';
+                    const riOut = dayAccoms.out ? getRouteInfo(place.id, place.lat, place.lng, 'out', Number(dayAccoms.out.lat), Number(dayAccoms.out.lng)) : null;
+                    const riIn = dayAccoms.in ? getRouteInfo(place.id, place.lat, place.lng, 'in', Number(dayAccoms.in.lat), Number(dayAccoms.in.lng)) : null;
+                    const riNormal = dayAccoms.normal && !dayAccoms.out && !dayAccoms.in ? getRouteInfo(place.id, place.lat, place.lng, 'normal', Number(dayAccoms.normal.lat), Number(dayAccoms.normal.lng)) : null;
+                    const fmtRoute = (ri) => {
+                      const d = ri.distance >= 1000 ? (ri.distance / 1000).toFixed(1) + 'km' : Math.round(ri.distance) + 'm';
+                      const t = ri.duration >= 3600 ? Math.floor(ri.duration / 3600) + '시간 ' + Math.round((ri.duration % 3600) / 60) + '분' : Math.round(ri.duration / 60) + '분';
+                      return `(거리: 약 ${d} / 시간: 약 ${t})`;
+                    };
                     return React.createElement('div', { key: place.id, className: 'place-card' },
                     React.createElement('div', { className: 'place-number' }, idx + 1),
                     React.createElement('div', { className: 'place-info' },
                       React.createElement('div', { className: 'place-name' }, shortName),
+                      riOut && React.createElement('div', { className: 'place-route-info', style: { color: '#EF4444' } }, fmtRoute(riOut)),
+                      riIn && React.createElement('div', { className: 'place-route-info', style: { color: '#2563EB' } }, fmtRoute(riIn)),
+                      riNormal && !riOut && !riIn && React.createElement('div', { className: 'place-route-info' }, fmtRoute(riNormal)),
                       addrPart && React.createElement('div', { className: 'place-addr' }, addrPart),
                       place.visit_time && React.createElement('div', { className: 'place-time' }, place.visit_time),
                       place.memo && React.createElement('div', { className: 'place-memo' }, place.memo)

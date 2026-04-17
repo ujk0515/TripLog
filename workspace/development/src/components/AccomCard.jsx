@@ -17,7 +17,7 @@ export default function AccomCard({ accom, variant, onClick }) {
   },
     React.createElement('span', { className: 'accom-badge' }, variant === 'in' ? 'In' : variant === 'out' ? 'Out' : '🏨'),
     React.createElement('div', { className: 'accom-info' },
-      React.createElement('div', { className: 'accom-name' }, shortName),
+      React.createElement('div', { className: 'accom-name' }, '\uC219\uC18C : ' + shortName),
       addrPart && React.createElement('div', { className: 'accom-addr' }, addrPart)
     )
   );
