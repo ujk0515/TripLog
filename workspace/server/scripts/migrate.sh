@@ -40,3 +40,13 @@ done
 
 echo ""
 echo "마이그레이션 완료: 적용 $applied 건, 스킵 $skipped 건"
+
+# 앱 DB 유저에게 모든 테이블 권한 부여
+APP_USER="${DB_APP_USER:-triplog_user}"
+if [[ $applied -gt 0 ]]; then
+  echo ""
+  echo "==> $APP_USER 에게 테이블 권한 부여 중..."
+  sudo -u postgres psql -d "$DB_NAME" -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $APP_USER;" > /dev/null
+  sudo -u postgres psql -d "$DB_NAME" -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO $APP_USER;" > /dev/null
+  echo "  권한 부여 완료"
+fi
