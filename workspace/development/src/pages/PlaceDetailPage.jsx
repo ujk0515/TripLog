@@ -5,6 +5,7 @@ import { useToast } from '../contexts/ToastContext';
 import { getDayAccommodations, normalizeDate, parsePlaceName } from '../utils/helpers';
 import MapView from '../components/MapView';
 import Spinner from '../components/Spinner';
+import Modal from '../components/Modal';
 
 export default function PlaceDetailPage() {
   const { path, navigate } = useRouter();
@@ -23,6 +24,16 @@ export default function PlaceDetailPage() {
   const [accommodations, setAccommodations] = useState([]);
   const [memos, setMemos] = useState([]);
   const [memoInput, setMemoInput] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDeletePlace = async () => {
+    try {
+      await apiCall('DELETE', `/trips/${tripId}/places/${placeId}`);
+      toast('장소가 삭제되었습니다');
+      navigate(`/trip/${tripId}`);
+    } catch { toast('삭제 실패'); }
+    setShowDeleteModal(false);
+  };
 
   useEffect(() => {
     if (tripId && date && placeId) loadData();
@@ -159,10 +170,20 @@ export default function PlaceDetailPage() {
         React.createElement('button', { className: 'topbar-back', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
         React.createElement('span', { className: 'topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
       ),
-      React.createElement('button', {
-        className: 'topbar-btn',
-        onClick: () => navigate(`/trip/${tripId}/day/${date}/place/${placeId}/edit`)
-      }, '\u270F\uFE0F')
+      React.createElement('div', { className: 'topbar-right' },
+        React.createElement('button', {
+          className: 'topbar-btn',
+          onClick: () => navigate(`/trip/${tripId}/day/${date}/place/${placeId}/edit`),
+          title: '\uC218\uC815',
+          dangerouslySetInnerHTML: { __html: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>' }
+        }),
+        React.createElement('button', {
+          className: 'topbar-btn',
+          onClick: () => setShowDeleteModal(true),
+          title: '\uC0AD\uC81C',
+          dangerouslySetInnerHTML: { __html: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>' }
+        })
+      )
     ),
 
     // --- Page Content ---
@@ -238,6 +259,17 @@ export default function PlaceDetailPage() {
           onClick: handleSaveMemo
         }, '\uC800\uC7A5')
       )
-    )
+    ),
+
+    // 삭제 확인 모달
+    React.createElement(Modal, {
+      open: showDeleteModal,
+      title: '\uC7A5\uC18C \uC0AD\uC81C',
+      body: `'${parsePlaceName(place?.name || '').short}'\uC744(\uB97C) \uC0AD\uC81C\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?`,
+      confirmLabel: '\uC0AD\uC81C',
+      confirmDanger: true,
+      onConfirm: handleDeletePlace,
+      onCancel: () => setShowDeleteModal(false)
+    })
   );
 }

@@ -22,10 +22,12 @@
 
 /* --- calendar overlay --- */
 .cal-overlay {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  position: fixed;
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100vw - 32px);
+  max-width: 500px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 12px;
@@ -33,6 +35,7 @@
   padding: 12px 8px 14px;
   z-index: 9999;
   margin-top: 4px;
+  overflow-x: auto;
 }
 
 /* --- header: nav arrows --- */
@@ -68,11 +71,13 @@
   position: relative;
 }
 .cal-month:first-child {
+  padding-left: 6px;
   padding-right: 6px;
   border-right: 1px solid #E2E8F0;
 }
 .cal-month:last-child {
   padding-left: 6px;
+  padding-right: 6px;
 }
 
 /* --- month title --- */

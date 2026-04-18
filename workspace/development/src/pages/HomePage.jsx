@@ -76,11 +76,13 @@ export default function HomePage({ onSelectTrip }) {
       ),
       React.createElement('div', { className: 'topbar-right' },
         trips.length > 0 && React.createElement('button', {
-          className: 'topbar-btn', onClick: () => navigate('/trip/new'), title: '\uC5EC\uD589 \uCD94\uAC00'
+          className: 'topbar-btn', onClick: () => navigate('/trip/new'), title: '\uC5EC\uD589 \uCD94\uAC00',
+          style: { fontSize: '20px', fontWeight: '300' }
         }, '+'),
         React.createElement('button', {
-          className: 'topbar-logout-btn', onClick: logout
-        }, '\uB85C\uADF8\uC544\uC6C3')
+          className: 'topbar-btn', onClick: logout, title: '\uB85C\uADF8\uC544\uC6C3',
+          dangerouslySetInnerHTML: { __html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' }
+        })
       )
     ),
     React.createElement('div', { className: 'home-page', ref: ptrContainerRef },
@@ -112,7 +114,7 @@ export default function HomePage({ onSelectTrip }) {
                 className: 'trip-card-trash',
                 onClick: (e) => handleTrashClick(e, trip),
                 title: '\uC0AD\uC81C'
-              }, '\uD83D\uDDD1'),
+              , dangerouslySetInnerHTML: { __html: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>' } }),
               React.createElement('div', { className: 'trip-card-country' },
                 React.createElement('span', { className: 'trip-card-flag' }, country.flag),
                 React.createElement('span', null, country.name)

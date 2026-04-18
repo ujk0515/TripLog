@@ -97,8 +97,7 @@
 .trip-card-title-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
+  gap: 12px;
   margin-bottom: var(--spacing-xs);
 }
 
