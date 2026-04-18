@@ -149,4 +149,75 @@ router.delete('/:placeId', requireAuth, async (req, res, next) => {
   }
 });
 
+// ============================================================
+// Place Memo Entries (place_memo_entries)
+// ============================================================
+
+// Verify place belongs to trip helper
+async function verifyPlaceOwnership(db, placeId, tripId) {
+  const result = await db.query('SELECT id FROM places WHERE id=$1 AND trip_id=$2', [placeId, tripId]);
+  return result.rows.length > 0;
+}
+
+// GET /api/trips/:id/places/:placeId/memos — 장소 메모 목록
+router.get('/:placeId/memos', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, placeId } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    const owns = await verifyPlaceOwnership(req.db, placeId, tripId);
+    if (!owns) return res.status(404).json({ message: '장소를 찾을 수 없습니다' });
+
+    const result = await req.db.query(
+      'SELECT id, memo, created_at FROM place_memo_entries WHERE place_id=$1 ORDER BY created_at ASC',
+      [placeId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/trips/:id/places/:placeId/memos — 장소 메모 추가
+router.post('/:placeId/memos', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, placeId } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    const owns = await verifyPlaceOwnership(req.db, placeId, tripId);
+    if (!owns) return res.status(404).json({ message: '장소를 찾을 수 없습니다' });
+
+    const { memo } = req.body;
+    if (!memo || !memo.trim()) return res.status(400).json({ message: '메모를 입력하세요' });
+    if (memo.length > 50) return res.status(400).json({ message: '메모는 50자까지 입력 가능합니다' });
+
+    const result = await req.db.query(
+      'INSERT INTO place_memo_entries (place_id, memo) VALUES ($1, $2) RETURNING id, memo, created_at',
+      [placeId, memo.trim()]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/trips/:id/places/:placeId/memos/:memoId — 장소 메모 삭제
+router.delete('/:placeId/memos/:memoId', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, placeId, memoId } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    const owns = await verifyPlaceOwnership(req.db, placeId, tripId);
+    if (!owns) return res.status(404).json({ message: '장소를 찾을 수 없습니다' });
+
+    await req.db.query('DELETE FROM place_memo_entries WHERE id=$1 AND place_id=$2', [memoId, placeId]);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

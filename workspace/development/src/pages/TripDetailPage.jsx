@@ -409,7 +409,7 @@ export default function TripDetailPage({ onSelectTrip }) {
             onClick: () => setMapOpen(!mapOpen)
           }, mapOpen ? '\u25B2 \uC9C0\uB3C4 \uB2EB\uAE30' : '\u25BC \uC9C0\uB3C4 \uBCF4\uAE30'),
 
-          mapOpen && React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms, onPlaceClick: (p) => navigate(`/trip/${tripId}/day/${selectedDay}/place/${p.id}/edit`) }),
+          mapOpen && React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms, onPlaceClick: (p) => navigate(`/trip/${tripId}/day/${selectedDay}/place/${p.id}`) }),
 
           // Place list wrapper (header fixed + list scrollable)
           React.createElement('div', { className: 'place-list-wrapper' },
@@ -448,7 +448,12 @@ export default function TripDetailPage({ onSelectTrip }) {
                       const t = ri.duration >= 3600 ? Math.floor(ri.duration / 3600) + '시간 ' + Math.round((ri.duration % 3600) / 60) + '분' : Math.round(ri.duration / 60) + '분';
                       return `(거리: 약 ${d} / 시간: 약 ${t})`;
                     };
-                    return React.createElement('div', { key: place.id, className: 'place-card' },
+                    return React.createElement('div', {
+                      key: place.id,
+                      className: 'place-card',
+                      style: { cursor: 'pointer' },
+                      onClick: () => navigate(`/trip/${tripId}/day/${selectedDay}/place/${place.id}`)
+                    },
                     React.createElement('div', { className: 'place-number' }, idx + 1),
                     React.createElement('div', { className: 'place-info' },
                       React.createElement('div', { className: 'place-name' }, shortName),
@@ -462,11 +467,11 @@ export default function TripDetailPage({ onSelectTrip }) {
                     React.createElement('div', { className: 'place-actions' },
                       React.createElement('button', {
                         className: 'place-edit-btn',
-                        onClick: () => navigate(`/trip/${tripId}/day/${selectedDay}/place/${place.id}/edit`)
+                        onClick: (e) => { e.stopPropagation(); navigate(`/trip/${tripId}/day/${selectedDay}/place/${place.id}/edit`); }
                       }, '\uC218\uC815'),
                       React.createElement('button', {
                         className: 'place-delete-btn',
-                        onClick: () => handleDeletePlace(place)
+                        onClick: (e) => { e.stopPropagation(); handleDeletePlace(place); }
                       }, '\uC0AD\uC81C')
                     )
                   );

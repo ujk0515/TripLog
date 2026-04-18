@@ -1,0 +1,235 @@
+/* ============================================
+   Place Detail Page — design_place_detail tokens
+   ============================================ */
+
+/* --- Top Bar (dark variant) --- */
+.pd-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-lg);
+  min-height: var(--topbar-height);
+  background: #1E3A5F;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+.pd-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.pd-topbar-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  border: none;
+  color: #FFFFFF;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.pd-topbar-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+/* --- Page Container --- */
+.place-detail-page {
+  flex: 1;
+  padding: var(--spacing-lg);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- Place Name --- */
+.pd-place-name {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* --- Address --- */
+.pd-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: var(--font-size-base);
+  color: #475569;
+  margin-bottom: var(--spacing-sm);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.pd-address-icon {
+  flex-shrink: 0;
+  font-size: var(--font-size-base);
+}
+
+/* --- Visit Date --- */
+.pd-visit-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-base);
+  color: #2563EB;
+  margin-bottom: var(--spacing-sm);
+}
+
+.pd-date-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(37, 99, 235, 0.1);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* --- Distance/Time --- */
+.pd-dist-time {
+  font-size: var(--font-size-base);
+  color: #64748B;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* --- Map Container --- */
+.pd-map-wrapper {
+  background: #E8F0FE;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+}
+
+.pd-map-wrapper .map-container {
+  height: 200px;
+  border-radius: 12px;
+}
+
+/* --- Divider --- */
+.pd-divider {
+  height: 1px;
+  background: #E2E8F0;
+  margin: var(--spacing-lg) 0;
+}
+
+/* --- Section Label --- */
+.pd-section-label {
+  font-size: var(--font-size-sm);
+  color: #94A3B8;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* --- Visit Time Value --- */
+.pd-visit-time-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 0;
+}
+
+/* --- Memo Section --- */
+.pd-memo-entries {
+  margin-bottom: var(--spacing-md);
+}
+
+.pd-memo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  margin-bottom: 6px;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.pd-memo-badge {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563EB;
+  color: #FFFFFF;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pd-memo-text {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: #334155;
+  min-width: 0;
+}
+
+.pd-memo-delete {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+  color: #94A3B8;
+}
+
+/* --- Memo Input --- */
+.pd-memo-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.pd-memo-input {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  resize: none;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.pd-memo-input::placeholder {
+  color: #94A3B8;
+}
+
+.pd-memo-save-btn {
+  width: 80px;
+  height: 40px;
+  background: #1E3A5F;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pd-memo-save-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

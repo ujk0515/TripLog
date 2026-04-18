@@ -15,6 +15,7 @@ import ExpenseListPage from './pages/ExpenseListPage';
 import ExpenseAddPage from './pages/ExpenseAddPage';
 import ScheduleCreatePage from './pages/ScheduleCreatePage';
 import AccommodationDetailPage from './pages/AccommodationDetailPage';
+import PlaceDetailPage from './pages/PlaceDetailPage';
 import ShareViewPage from './pages/ShareViewPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import VerifyCodePage from './pages/VerifyCodePage';
@@ -51,6 +52,7 @@ export default function App() {
   const tripDetailMatch = matchRoute('/trip/:id', path);
   const placeNewMatch = matchRoute('/trip/:tripId/day/:date/place/new', path);
   const placeEditMatch = matchRoute('/trip/:tripId/day/:date/place/:placeId/edit', path);
+  const placeDetailMatch = matchRoute('/trip/:tripId/day/:date/place/:placeId', path);
   const expenseListMatch = matchRoute('/trip/:id/expense', path);
   const expenseNewMatch = matchRoute('/trip/:tripId/expense/new', path);
   const expenseEditMatch = matchRoute('/trip/:tripId/expense/:expenseId/edit', path);
@@ -63,6 +65,8 @@ export default function App() {
     pageContent = React.createElement(TripCreatePage, { onSelectTrip: setCurrentTrip, editTrip: currentTrip });
   } else if (placeNewMatch || placeEditMatch) {
     pageContent = React.createElement(PlaceAddPage);
+  } else if (placeDetailMatch) {
+    pageContent = React.createElement(PlaceDetailPage);
   } else if (expenseNewMatch || expenseEditMatch) {
     pageContent = React.createElement(ExpenseAddPage);
   } else if (scheduleMatch) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 
-export default function MapView({ places, accommodation, dayAccommodations, onRouteInfo, onPlaceClick }) {
+export default function MapView({ places, accommodation, dayAccommodations, onRouteInfo, onPlaceClick, markerVariant }) {
   const mapRef = useRef(null);
   const leafletMapRef = useRef(null);
   const markersRef = useRef([]);
@@ -104,17 +104,28 @@ export default function MapView({ places, accommodation, dayAccommodations, onRo
 
     if (validPlaces.length === 0 && !hasAccomMarkers) return;
 
-    // Add numbered markers
+    // Add markers (numbered or flag variant)
     const latlngs = [];
     validPlaces.forEach((p, i) => {
-      const numberedIcon = L.divIcon({
-        className: 'leaflet-numbered-icon',
-        html: '<div style="background:#333;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;border:1px solid #333;">' + (i + 1) + '</div>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        popupAnchor: [0, -14]
-      });
-      const marker = L.marker([Number(p.lat), Number(p.lng)], { icon: numberedIcon }).addTo(map);
+      let placeIcon;
+      if (markerVariant === 'flag') {
+        placeIcon = L.divIcon({
+          className: 'leaflet-flag-icon',
+          html: '<div style="display:flex;align-items:center;gap:2px;"><span style="font-size:22px;">&#x1F6A9;</span><span style="background:#EF4444;color:#fff;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;">\uBAA9\uC801\uC9C0</span></div>',
+          iconSize: [80, 28],
+          iconAnchor: [12, 24],
+          popupAnchor: [0, -24]
+        });
+      } else {
+        placeIcon = L.divIcon({
+          className: 'leaflet-numbered-icon',
+          html: '<div style="background:#333;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;border:1px solid #333;">' + (i + 1) + '</div>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -14]
+        });
+      }
+      const marker = L.marker([Number(p.lat), Number(p.lng)], { icon: placeIcon }).addTo(map);
       const shortName = (p.name || '').split(',')[0].trim();
       const popupContent = onPlaceClick
         ? '<div style="text-align:center"><b>' + (i + 1) + '. ' + shortName + '</b><br><a href="#" class="map-popup-link" data-place-id="' + p.id + '" style="color:#2563EB;font-size:12px;">\uC0C1\uC138\uBCF4\uAE30 \u2192</a></div>'
