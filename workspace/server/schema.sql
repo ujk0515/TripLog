@@ -121,6 +121,14 @@ CREATE TABLE password_reset_codes (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- 장소별 메모
+CREATE TABLE place_memo_entries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  place_id UUID NOT NULL REFERENCES places(id) ON DELETE CASCADE,
+  memo VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 -- ============================================================
 -- Indexes
 -- ============================================================
@@ -131,3 +139,4 @@ CREATE INDEX idx_accommodations_trip_id ON accommodations(trip_id);
 CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
 CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
 CREATE INDEX idx_reset_codes_email ON password_reset_codes(email);
+CREATE INDEX idx_place_memo_entries_place ON place_memo_entries(place_id, created_at);

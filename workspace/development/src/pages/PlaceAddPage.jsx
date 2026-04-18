@@ -250,10 +250,15 @@ export default function PlaceAddPage() {
         React.createElement(MapView, { places: [{ lat: selectedLat, lng: selectedLng, name: name }] })
       ),
 
+      // 플로팅 버튼 가림 방지 여백
+      React.createElement('div', { style: { height: 80 } })
+    ),
+    // 플로팅 저장 버튼
+    React.createElement('div', { className: 'trip-create-floating-submit' },
       React.createElement('button', {
-        className: 'form-submit', type: 'submit', disabled: loading
-      }, loading ? React.createElement(Spinner) : '\uC800\uC7A5'),
-      React.createElement('div', { className: 'form-hint' }, '\uC800\uC7A5 \uC911: \uBC84\uD2BC \uBE44\uD65C\uC131\uD654 + \uC2A4\uD53C\uB108')
+        className: 'form-submit', disabled: loading,
+        onClick: (e) => { e.preventDefault(); handleSubmit(e); }
+      }, loading ? React.createElement(Spinner) : '\uC800\uC7A5')
     )
   );
 }
