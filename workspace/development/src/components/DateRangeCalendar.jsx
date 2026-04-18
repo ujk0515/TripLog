@@ -85,16 +85,31 @@ export default function DateRangeCalendar({ startDate, endDate, onSelect, onClos
     );
   }
 
-  const [topPos, setTopPos] = useState(() => triggerRef?.current ? triggerRef.current.getBoundingClientRect().bottom + 4 : 200);
+  const [topPos, setTopPos] = useState(200);
 
   useEffect(() => {
     const updatePos = () => {
-      if (triggerRef?.current) {
-        setTopPos(triggerRef.current.getBoundingClientRect().bottom + 4);
+      if (!triggerRef?.current || !calRef.current) return;
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const calHeight = calRef.current.offsetHeight || 300;
+      const viewportHeight = window.innerHeight;
+      const belowPos = triggerRect.bottom + 4;
+      const fitsBelow = belowPos + calHeight <= viewportHeight;
+
+      if (fitsBelow) {
+        setTopPos(belowPos);
+      } else {
+        const abovePos = triggerRect.top - calHeight - 4;
+        setTopPos(abovePos > 0 ? abovePos : belowPos);
       }
     };
+    updatePos();
     window.addEventListener('scroll', updatePos, true);
-    return () => window.removeEventListener('scroll', updatePos, true);
+    window.addEventListener('resize', updatePos);
+    return () => {
+      window.removeEventListener('scroll', updatePos, true);
+      window.removeEventListener('resize', updatePos);
+    };
   }, [triggerRef]);
 
   return React.createElement('div', { className: 'cal-overlay', ref: calRef, style: { top: topPos + 'px' } },

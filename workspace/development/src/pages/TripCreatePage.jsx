@@ -388,7 +388,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
           COUNTRIES.map(c => React.createElement('option', { key: c.code, value: c.code }, `${c.flag} ${c.name}`))
         )
       ),
-      React.createElement('div', { className: 'form-group', style: { position: 'relative', zIndex: 600 } },
+      React.createElement('div', { className: 'form-group', style: { position: 'relative' } },
         React.createElement('div', { className: 'form-row' },
           React.createElement('div', { style: { flex: 1 } },
             React.createElement('label', { className: 'form-label' }, '\uC2DC\uC791\uC77C'),
