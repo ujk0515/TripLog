@@ -340,7 +340,7 @@ export default function TripDetailPage({ onSelectTrip }) {
         React.createElement('span', { className: 'topbar-title' }, trip.title)
       ),
       React.createElement('div', { className: 'topbar-right' },
-        React.createElement('button', { className: 'topbar-btn', onClick: handleShare, title: '\uACF5\uC720' }, '\u2191'),
+        React.createElement('button', { className: 'topbar-btn', onClick: handleShare, title: '\uACF5\uC720', dangerouslySetInnerHTML: { __html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>' } }),
         React.createElement('div', { style: { position: 'relative' } },
           React.createElement('button', {
             className: 'topbar-btn topbar-btn-outline',
