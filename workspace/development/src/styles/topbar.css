@@ -3,10 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 0 var(--spacing-lg);
   min-height: var(--topbar-height);
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
+  background: #4A6A8E;
   position: fixed;
   top: 0;
   left: 0;
@@ -22,21 +21,23 @@
 }
 
 .topbar-back {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-secondary);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-full);
-  font-size: var(--font-size-md);
-  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  color: #FFFFFF;
   border: none;
+  cursor: pointer;
 }
 
 .topbar-title {
   font-size: var(--font-size-md);
   font-weight: 600;
+  color: #FFFFFF;
 }
 
 .topbar-right {
@@ -46,31 +47,32 @@
 }
 
 .topbar-btn {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-text-primary);
-  color: var(--color-text-white);
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
   border-radius: var(--radius-full);
   font-size: var(--font-size-base);
   border: none;
+  cursor: pointer;
 }
 
 .topbar-btn-outline {
-  background: none;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  border: none;
 }
 
 .topbar-logout-btn {
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--color-text-secondary);
-  background: none;
-  border: 1px solid var(--color-border);
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   white-space: nowrap;

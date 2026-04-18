@@ -86,10 +86,10 @@ export default function PlaceDetailPage() {
   // --- Loading state ---
   if (loading) {
     return React.createElement(React.Fragment, null,
-      React.createElement('div', { className: 'pd-topbar' },
-        React.createElement('div', { className: 'pd-topbar-left' },
-          React.createElement('button', { className: 'pd-topbar-btn', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
-          React.createElement('span', { className: 'pd-topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
+      React.createElement('div', { className: 'topbar' },
+        React.createElement('div', { className: 'topbar-left' },
+          React.createElement('button', { className: 'topbar-back', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
+          React.createElement('span', { className: 'topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
         )
       ),
       React.createElement('div', { className: 'place-detail-page' },
@@ -100,10 +100,10 @@ export default function PlaceDetailPage() {
 
   if (!place || !trip) {
     return React.createElement(React.Fragment, null,
-      React.createElement('div', { className: 'pd-topbar' },
-        React.createElement('div', { className: 'pd-topbar-left' },
-          React.createElement('button', { className: 'pd-topbar-btn', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
-          React.createElement('span', { className: 'pd-topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
+      React.createElement('div', { className: 'topbar' },
+        React.createElement('div', { className: 'topbar-left' },
+          React.createElement('button', { className: 'topbar-back', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
+          React.createElement('span', { className: 'topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
         )
       ),
       React.createElement('div', { className: 'place-detail-page' }, '\uC7A5\uC18C\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4')
@@ -154,13 +154,13 @@ export default function PlaceDetailPage() {
 
   return React.createElement(React.Fragment, null,
     // --- Top Bar ---
-    React.createElement('div', { className: 'pd-topbar' },
-      React.createElement('div', { className: 'pd-topbar-left' },
-        React.createElement('button', { className: 'pd-topbar-btn', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
-        React.createElement('span', { className: 'pd-topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
+    React.createElement('div', { className: 'topbar' },
+      React.createElement('div', { className: 'topbar-left' },
+        React.createElement('button', { className: 'topbar-back', onClick: () => navigate(`/trip/${tripId}`) }, '\u2190'),
+        React.createElement('span', { className: 'topbar-title' }, '\uC7A5\uC18C \uC0C1\uC138')
       ),
       React.createElement('button', {
-        className: 'pd-topbar-btn',
+        className: 'topbar-btn',
         onClick: () => navigate(`/trip/${tripId}/day/${date}/place/${placeId}/edit`)
       }, '\u270F\uFE0F')
     ),

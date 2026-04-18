@@ -364,7 +364,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
   return React.createElement(React.Fragment, null,
     React.createElement('div', { className: 'topbar' },
       React.createElement('div', { className: 'topbar-left' },
-        React.createElement('button', { className: 'topbar-back', onClick: () => navigate('/') }, '\u2190'),
+        React.createElement('button', { className: 'topbar-back', onClick: () => navigate(editTrip ? `/trip/${editTrip.id}` : '/') }, '\u2190'),
         React.createElement('span', { className: 'topbar-title' }, editTrip ? '\uC5EC\uD589 \uC218\uC815' : '\uC0C8 \uC5EC\uD589')
       ),
       React.createElement('div', { className: 'topbar-right' })

@@ -9,7 +9,7 @@
   justify-content: space-between;
   padding: 0 var(--spacing-lg);
   min-height: var(--topbar-height);
-  background: #1E3A5F;
+  background: #4A6A8E;
   position: fixed;
   top: 0;
   left: 0;
@@ -219,7 +219,7 @@
 .pd-memo-save-btn {
   width: 80px;
   height: 40px;
-  background: #1E3A5F;
+  background: #4A6A8E;
   color: #FFFFFF;
   border: none;
   border-radius: 12px;
