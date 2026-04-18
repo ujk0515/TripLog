@@ -182,7 +182,10 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
 
       // 장소 목록
       React.createElement('div', { className: 'schedule-places' },
-        React.createElement('div', { className: 'place-section-title' }, '\uC7A5\uC18C \uCD94\uAC00'),
+        React.createElement('div', { className: 'place-section-title', style: { display: 'flex', alignItems: 'baseline', gap: '8px' } },
+          '\uC7A5\uC18C \uCD94\uAC00',
+          React.createElement('span', { style: { fontSize: '10px', color: '#F87171' } }, '*\uBAA9\uC801\uC9C0\uC5D0 \uB300\uD55C \uD655\uC2E4\uD55C \uC804\uCCB4\uBA85\uCE6D\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694.')
+        ),
         dayPlaces.map((place, idx) => {
           const { short: sn, addr: sa } = parsePlaceName(place.name);
           const fmtRoute = (ri) => {

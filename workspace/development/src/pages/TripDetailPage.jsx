@@ -416,7 +416,7 @@ export default function TripDetailPage({ onSelectTrip }) {
             React.createElement('div', { className: 'place-section-title', style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
               React.createElement('span', null, '\uC7A5\uC18C \uBAA9\uB85D'),
               React.createElement('button', {
-                className: 'topbar-btn', style: { width: 32, height: 32, fontSize: 14 },
+                style: { width: 28, height: 28, fontSize: 16, fontWeight: '300', background: '#333', color: '#fff', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' },
                 onClick: () => navigate(`/trip/${tripId}/day/${selectedDay}/place/new`)
               }, '+')
             ),

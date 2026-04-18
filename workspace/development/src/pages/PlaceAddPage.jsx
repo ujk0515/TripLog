@@ -179,9 +179,10 @@ export default function PlaceAddPage() {
         })()
       ),
       React.createElement('div', { className: 'form-group' },
-        React.createElement('label', { className: 'form-label' },
+        React.createElement('label', { className: 'form-label', style: { display: 'flex', alignItems: 'baseline', gap: '8px' } },
           '\uC7A5\uC18C\uBA85',
-          React.createElement('span', { className: 'form-label-required' }, '*')
+          React.createElement('span', { className: 'form-label-required' }, '*'),
+          React.createElement('span', { style: { fontSize: '10px', color: '#F87171', fontWeight: '400' } }, '*\uBAA9\uC801\uC9C0\uC5D0 \uB300\uD55C \uD655\uC2E4\uD55C \uC804\uCCB4\uBA85\uCE6D\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694.')
         ),
         React.createElement('div', { className: 'search-input-wrap' },
           React.createElement('input', {
