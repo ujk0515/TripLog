@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 
-export default function MapView({ places, accommodation, dayAccommodations, onRouteInfo }) {
+export default function MapView({ places, accommodation, dayAccommodations, onRouteInfo, onPlaceClick }) {
   const mapRef = useRef(null);
   const leafletMapRef = useRef(null);
   const markersRef = useRef([]);
@@ -115,7 +115,18 @@ export default function MapView({ places, accommodation, dayAccommodations, onRo
         popupAnchor: [0, -14]
       });
       const marker = L.marker([Number(p.lat), Number(p.lng)], { icon: numberedIcon }).addTo(map);
-      marker.bindPopup('<b>' + (i + 1) + '. ' + (p.name || '') + '</b>');
+      const shortName = (p.name || '').split(',')[0].trim();
+      const popupContent = onPlaceClick
+        ? '<div style="text-align:center"><b>' + (i + 1) + '. ' + shortName + '</b><br><a href="#" class="map-popup-link" data-place-id="' + p.id + '" style="color:#2563EB;font-size:12px;">\uC0C1\uC138\uBCF4\uAE30 \u2192</a></div>'
+        : '<b>' + (i + 1) + '. ' + shortName + '</b>';
+      const popup = L.popup({ autoPanPadding: L.point(40, 40) }).setContent(popupContent);
+      marker.bindPopup(popup);
+      if (onPlaceClick) {
+        marker.on('popupopen', () => {
+          const link = marker.getPopup().getElement()?.querySelector('.map-popup-link');
+          if (link) link.addEventListener('click', (e) => { e.preventDefault(); onPlaceClick(p); });
+        });
+      }
       markersRef.current.push(marker);
       latlngs.push([Number(p.lat), Number(p.lng)]);
     });

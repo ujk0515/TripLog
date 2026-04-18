@@ -365,7 +365,11 @@ export default function TripDetailPage({ onSelectTrip }) {
           `${formatDate(trip.start_date)} - ${formatDate(trip.end_date)} (${getDaysBetween(trip.start_date, trip.end_date).length}\uC77C)`
         ),
         React.createElement('div', { className: 'trip-summary-meta' },
-          `\uC7A5\uC18C ${trip.place_count || trip.placeCount || places.length}\uAC1C | ${formatDualCurrency(Math.round(Number(trip.total_expense_krw || trip.totalExpense || 0)), trip.total_expense_local || 0, trip.local_currency)}`
+          `\uC7A5\uC18C ${trip.place_count || trip.placeCount || places.length}\uAC1C | `,
+          React.createElement('span', {
+            className: 'expense-link',
+            onClick: () => navigate(`/trip/${tripId}/expense`)
+          }, `\uD83E\uDE99 ${formatDualCurrency(Math.round(Number(trip.total_expense_krw || trip.totalExpense || 0)), trip.total_expense_local || 0, trip.local_currency)}`)
         )
       ),
 
@@ -395,12 +399,6 @@ export default function TripDetailPage({ onSelectTrip }) {
         return null;
       })(),
 
-      // Expense View Button
-      React.createElement('button', {
-        className: 'expense-view-btn',
-        onClick: () => navigate(`/trip/${tripId}/expense`)
-      }, '\uACBD\uBE44 \uBCF4\uAE30 \u2192'),
-
       // Main Content Layout (Desktop: side by side)
       React.createElement('div', { className: 'trip-detail-layout' },
         // Left: Schedule
@@ -411,7 +409,7 @@ export default function TripDetailPage({ onSelectTrip }) {
             onClick: () => setMapOpen(!mapOpen)
           }, mapOpen ? '\u25B2 \uC9C0\uB3C4 \uB2EB\uAE30' : '\u25BC \uC9C0\uB3C4 \uBCF4\uAE30'),
 
-          mapOpen && React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms }),
+          mapOpen && React.createElement(MapView, { places: dayPlaces, dayAccommodations: dayAccoms, onPlaceClick: (p) => navigate(`/trip/${tripId}/day/${selectedDay}/place/${p.id}/edit`) }),
 
           // Place list wrapper (header fixed + list scrollable)
           React.createElement('div', { className: 'place-list-wrapper' },
@@ -494,17 +492,17 @@ export default function TripDetailPage({ onSelectTrip }) {
               )
             ),
             // 입력 영역
-            React.createElement('div', { className: 'memo-input-wrap' },
-              React.createElement('textarea', {
-                className: 'memo-input',
-                placeholder: '\uBA54\uBAA8\uB97C \uC785\uB825\uD558\uC138\uC694... (50\uC790)',
-                value: memoInput,
-                maxLength: 50,
-                rows: 1,
-                onChange: e => setMemoInput(e.target.value),
-                onInput: e => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
-              }),
-              memoInput.trim() && React.createElement('button', {
+            React.createElement('textarea', {
+              className: 'memo-input',
+              placeholder: '\uBA54\uBAA8\uB97C \uC785\uB825\uD558\uC138\uC694... (50\uC790)',
+              value: memoInput,
+              maxLength: 50,
+              rows: 1,
+              onChange: e => setMemoInput(e.target.value),
+              onInput: e => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
+            }),
+            memoInput.trim() && React.createElement('div', { className: 'memo-save-row' },
+              React.createElement('button', {
                 className: 'memo-save-btn',
                 onClick: handleSaveMemo
               }, '\uC800\uC7A5')
