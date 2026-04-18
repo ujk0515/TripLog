@@ -336,8 +336,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
       }
 
       if (editTrip) {
-        navigate(`/trip/${tripResult.id}`);
-        toast('\uC5EC\uD589\uC774 \uC218\uC815\uB418\uC5C8\uC2B5\uB2C8\uB2E4');
+        navigate(`/trip/${tripResult.id}/schedule`);
       } else {
         navigate(`/trip/${tripResult.id}/schedule`);
       }
@@ -688,7 +687,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
     React.createElement('div', { className: 'trip-create-floating-submit' },
       React.createElement('button', {
         className: 'form-submit', type: 'submit', form: 'trip-create-form', disabled: !isValid || loading
-      }, loading ? React.createElement(Spinner) : (editTrip ? '\uC5EC\uD589 \uC218\uC815' : '\uB2E4\uC74C \uC77C\uC815 \uB9CC\uB4E4\uAE30')),
+      }, loading ? React.createElement(Spinner) : (editTrip ? '\uB2E4\uC74C \uC77C\uC815 \uC218\uC815' : '\uB2E4\uC74C \uC77C\uC815 \uB9CC\uB4E4\uAE30')),
       React.createElement('div', { className: 'form-hint trip-create-floating-hint' }, '\u203B \uC5EC\uD589\uBA85, \uAD6D\uAC00 \uD544\uC218 | \uC2DC\uC791\uC77C \u2264 \uC885\uB8CC\uC77C')
     ),
 

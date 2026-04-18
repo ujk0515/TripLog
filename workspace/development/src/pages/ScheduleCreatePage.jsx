@@ -126,13 +126,16 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
     } catch(e) { toast('삭제 실패'); }
   };
 
-  // 여행 만들기 (완료)
+  // 여행 만들기/수정 (완료)
+  const isEditMode = trip && trip.status === 'complete';
   const handleComplete = async () => {
     try {
-      await apiCall('PUT', `/trips/${tripId}`, { status: 'complete' });
+      if (!isEditMode) {
+        await apiCall('PUT', `/trips/${tripId}`, { status: 'complete' });
+      }
       navigate(`/trip/${tripId}`);
-      toast('나의 여행이 생성되었습니다');
-    } catch(e) { toast('오류가 발생했습니다'); }
+      toast(isEditMode ? '\uC5EC\uD589\uC774 \uC218\uC815\uB418\uC5C8\uC2B5\uB2C8\uB2E4' : '\uB098\uC758 \uC5EC\uD589\uC774 \uC0DD\uC131\uB418\uC5C8\uC2B5\uB2C8\uB2E4');
+    } catch(e) { toast('\uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4'); }
   };
 
   if (loading) {
@@ -151,7 +154,7 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
     React.createElement('div', { className: 'topbar' },
       React.createElement('div', { className: 'topbar-left' },
         React.createElement('button', { className: 'topbar-back', onClick: () => navigate(`/trip/${tripId}/edit`) }, '\u2190'),
-        React.createElement('span', { className: 'topbar-title' }, '\uC77C\uC790\uBCC4 \uC77C\uC815 \uC0DD\uC131')
+        React.createElement('span', { className: 'topbar-title' }, isEditMode ? '\uC77C\uC790\uBCC4 \uC77C\uC815 \uC218\uC815' : '\uC77C\uC790\uBCC4 \uC77C\uC815 \uC0DD\uC131')
       )
     ),
     React.createElement('div', { className: 'trip-detail-page schedule-create-with-floating' },
@@ -256,7 +259,7 @@ export default function ScheduleCreatePage({ onSelectTrip }) {
       React.createElement('button', {
         className: 'form-submit',
         onClick: handleComplete
-      }, '\uC5EC\uD589 \uB9CC\uB4E4\uAE30')
+      }, isEditMode ? '\uC5EC\uD589 \uC218\uC815' : '\uC5EC\uD589 \uB9CC\uB4E4\uAE30')
     ),
 
     // 장소 삭제 확인 팝업
