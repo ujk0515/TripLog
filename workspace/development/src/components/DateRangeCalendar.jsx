@@ -85,7 +85,19 @@ export default function DateRangeCalendar({ startDate, endDate, onSelect, onClos
     );
   }
 
-  return React.createElement('div', { className: 'cal-overlay', ref: calRef },
+  const [topPos, setTopPos] = useState(() => triggerRef?.current ? triggerRef.current.getBoundingClientRect().bottom + 4 : 200);
+
+  useEffect(() => {
+    const updatePos = () => {
+      if (triggerRef?.current) {
+        setTopPos(triggerRef.current.getBoundingClientRect().bottom + 4);
+      }
+    };
+    window.addEventListener('scroll', updatePos, true);
+    return () => window.removeEventListener('scroll', updatePos, true);
+  }, [triggerRef]);
+
+  return React.createElement('div', { className: 'cal-overlay', ref: calRef, style: { top: topPos + 'px' } },
     React.createElement('div', { className: 'cal-header' },
       React.createElement('button', {
         type: 'button', className: 'cal-nav', onClick: () => {

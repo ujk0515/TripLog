@@ -26,6 +26,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
 
   // Calendar state
   const calTriggerRef = useRef(null);
+  const accomCalTriggerRefs = useRef({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState(() => {
     if (editTrip?.start_date) {
@@ -559,6 +560,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
                       React.createElement('label', { className: 'form-label' }, '\uCCB4\uD06C\uC778'),
                       React.createElement('div', {
                         className: `cal-trigger-field ${aItem.checkIn ? 'has-value' : ''}`,
+                        ref: (el) => { accomCalTriggerRefs.current[aIdx] = el; },
                         onClick: () => updateAccomListItem(aIdx, {
                           showCal: !aItem.showCal,
                           calMonth: aItem.calMonth || (() => {
@@ -589,6 +591,7 @@ export default function TripCreatePage({ onSelectTrip, editTrip }) {
                     maxDate: endDate,
                     onSelect: (dateStr) => handleAccomDateSelect(aIdx, dateStr),
                     onClose: () => updateAccomListItem(aIdx, { showCal: false }),
+                    triggerRef: { current: accomCalTriggerRefs.current[aIdx] },
                     calendarMonth: aItem.calMonth || (() => {
                       const base = startDate ? new Date(startDate) : new Date();
                       return { year: base.getFullYear(), month: base.getMonth() };
