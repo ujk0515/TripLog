@@ -261,6 +261,14 @@
   color: var(--color-error);
   border-color: var(--color-error);
 }
+.place-delete-btn-icon {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+}
 
 /* Day Memo */
 .day-memo {

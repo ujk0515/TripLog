@@ -466,13 +466,9 @@ export default function TripDetailPage({ onSelectTrip }) {
                     ),
                     React.createElement('div', { className: 'place-actions' },
                       React.createElement('button', {
-                        className: 'place-edit-btn',
-                        onClick: (e) => { e.stopPropagation(); navigate(`/trip/${tripId}/day/${selectedDay}/place/${place.id}/edit`); }
-                      }, '\uC218\uC815'),
-                      React.createElement('button', {
-                        className: 'place-delete-btn',
+                        className: 'place-delete-btn-icon',
                         onClick: (e) => { e.stopPropagation(); handleDeletePlace(place); }
-                      }, '\uC0AD\uC81C')
+                      }, '\uD83D\uDDD1\uFE0F')
                     )
                   );
                   })
