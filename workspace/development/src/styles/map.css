@@ -266,6 +266,70 @@
   margin-bottom: var(--spacing-sm);
 }
 
+.memo-entries {
+  margin-bottom: 8px;
+}
+.memo-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.memo-entry-number {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+.memo-entry-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+.memo-entry-delete {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.memo-input-wrap {
+  position: relative;
+}
+.memo-input {
+  width: 100%;
+  min-height: 36px;
+  max-height: 120px;
+  padding: 8px 60px 8px 12px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  resize: none;
+  overflow: hidden;
+}
+.memo-input::placeholder {
+  color: var(--color-text-secondary);
+}
+.memo-save-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .day-memo-textarea {
   width: 100%;
   min-height: 100px;

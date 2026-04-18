@@ -92,4 +92,56 @@ router.put('/:date/memo', requireAuth, async (req, res, next) => {
   }
 });
 
+// GET /api/trips/:id/days/:date/memos — 일자별 메모 목록
+router.get('/:date/memos', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, date } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    const result = await req.db.query(
+      'SELECT id, memo, created_at FROM day_memo_entries WHERE trip_id=$1 AND date=$2 ORDER BY created_at ASC',
+      [tripId, date]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/trips/:id/days/:date/memos — 메모 추가
+router.post('/:date/memos', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, date } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    const { memo } = req.body;
+    if (!memo || !memo.trim()) return res.status(400).json({ message: '메모를 입력하세요' });
+    if (memo.length > 50) return res.status(400).json({ message: '메모는 50자까지 입력 가능합니다' });
+
+    const result = await req.db.query(
+      'INSERT INTO day_memo_entries (trip_id, date, memo) VALUES ($1, $2, $3) RETURNING id, memo, created_at',
+      [tripId, date, memo.trim()]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/trips/:id/days/:date/memos/:memoId — 메모 삭제
+router.delete('/:date/memos/:memoId', requireAuth, async (req, res, next) => {
+  try {
+    const { id: tripId, memoId } = req.params;
+    const check = await verifyTripOwner(req.db, tripId, req.user.id);
+    if (check.err) return res.status(check.err).json({ message: check.msg });
+
+    await req.db.query('DELETE FROM day_memo_entries WHERE id=$1 AND trip_id=$2', [memoId, tripId]);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

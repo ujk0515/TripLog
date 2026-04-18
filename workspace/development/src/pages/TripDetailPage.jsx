@@ -27,6 +27,8 @@ export default function TripDetailPage({ onSelectTrip }) {
   const [selectedDay, setSelectedDay] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
   const [dayMemo, setDayMemo] = useState('');
+  const [memoEntries, setMemoEntries] = useState([]);
+  const [memoInput, setMemoInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
@@ -165,8 +167,32 @@ export default function TripDetailPage({ onSelectTrip }) {
     if (selectedDay && days.length > 0) {
       const day = days.find(d => d.date === selectedDay);
       setDayMemo(day?.memo || '');
+      loadMemoEntries(selectedDay);
     }
   }, [selectedDay, days]);
+
+  const loadMemoEntries = async (date) => {
+    try {
+      const data = await apiCall('GET', `/trips/${tripId}/days/${date}/memos`);
+      setMemoEntries(Array.isArray(data) ? data : []);
+    } catch { setMemoEntries([]); }
+  };
+
+  const handleSaveMemo = async () => {
+    if (!memoInput.trim()) return;
+    try {
+      await apiCall('POST', `/trips/${tripId}/days/${selectedDay}/memos`, { memo: memoInput.trim() });
+      setMemoInput('');
+      loadMemoEntries(selectedDay);
+    } catch(e) { toast('메모 저장 실패'); }
+  };
+
+  const handleDeleteMemoEntry = async (memoId) => {
+    try {
+      await apiCall('DELETE', `/trips/${tripId}/days/${selectedDay}/memos/${memoId}`);
+      setMemoEntries(prev => prev.filter(m => m.id !== memoId));
+    } catch { toast('삭제 실패'); }
+  };
 
   const handleMemoChange = (val) => {
     setDayMemo(val);
@@ -454,12 +480,35 @@ export default function TripDetailPage({ onSelectTrip }) {
           // Day Memo
           React.createElement('div', { className: 'day-memo' },
             React.createElement('div', { className: 'day-memo-title' }, '\uC624\uB298\uC758 \uBA54\uBAA8'),
-            React.createElement('textarea', {
-              className: 'day-memo-textarea',
-              placeholder: '\uBA54\uBAA8\uB97C \uC785\uB825\uD558\uC138\uC694...',
-              value: dayMemo,
-              onChange: e => handleMemoChange(e.target.value)
-            })
+            // 저장된 메모 목록
+            memoEntries.length > 0 && React.createElement('div', { className: 'memo-entries' },
+              memoEntries.map((entry, idx) =>
+                React.createElement('div', { key: entry.id, className: 'memo-entry' },
+                  React.createElement('span', { className: 'memo-entry-number' }, idx + 1 + '.'),
+                  React.createElement('span', { className: 'memo-entry-text' }, entry.memo),
+                  React.createElement('button', {
+                    className: 'memo-entry-delete',
+                    onClick: () => handleDeleteMemoEntry(entry.id)
+                  }, '\u00D7')
+                )
+              )
+            ),
+            // 입력 영역
+            React.createElement('div', { className: 'memo-input-wrap' },
+              React.createElement('textarea', {
+                className: 'memo-input',
+                placeholder: '\uBA54\uBAA8\uB97C \uC785\uB825\uD558\uC138\uC694... (50\uC790)',
+                value: memoInput,
+                maxLength: 50,
+                rows: 1,
+                onChange: e => setMemoInput(e.target.value),
+                onInput: e => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
+              }),
+              memoInput.trim() && React.createElement('button', {
+                className: 'memo-save-btn',
+                onClick: handleSaveMemo
+              }, '\uC800\uC7A5')
+            )
           )
         ),
 
